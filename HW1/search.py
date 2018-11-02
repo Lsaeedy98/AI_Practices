@@ -86,6 +86,40 @@ def depthFirstSearch(problem):
     print "Is the start a goal?", problem.isGoalState(problem.getStartState())
     print "Start's successors:", problem.getSuccessors(problem.getStartState())
     """
+
+    # test
+
+    Frontier = util.Stack()
+    Frontier.push((problem.getStartState(), []))
+
+    # list of  explored nodes for checking
+    Explored = []
+    Explored.append(problem.getStartState())
+
+    while True:
+        # next node in frontier
+        tempState = Frontier.pop()
+        state = tempState[0]
+        actions = tempState[1]
+
+        # generate succesors and add them
+        for next in problem.getSuccessors(state):
+            new_state = next[0]
+            new_direction = next[1]
+            if new_state not in Explored:
+                if problem.isGoalState(new_state):
+                    # found goal
+                    return actions + [new_direction]
+                else:
+                    # add to frontier to generate its children in the next loop
+                    Frontier.push((new_state, actions + [new_direction]))
+                    # add to explored so it can not be added to frontier again
+                    Explored.append(new_state)
+
+        # end of nodes in graph
+        if Frontier.isEmpty() == 1:
+            break
+
     "*** YOUR CODE HERE ***"
     util.raiseNotDefined()
 
