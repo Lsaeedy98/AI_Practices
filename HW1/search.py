@@ -156,6 +156,42 @@ def breadthFirstSearch(problem):
 
 def uniformCostSearch(problem):
     """Search the node of least total cost first."""
+#a list for states of nodes to check if a repeated state is being added, update the cost to lower one
+    Frontier = []
+    Frontier.append(problem.getStartState())
+
+#priority queue of nodes and  path costs
+    Queue = util.PriorityQueue()
+    Queue.push((problem.getStartState(), []), 0)
+#list of visited nodes
+    Expanded = []
+
+    while True:
+        #next node in priority queue
+        tempState = Queue.pop()
+        state = tempState[0]
+        actions = tempState[1]
+        Frontier.remove(state)
+
+        if (problem.isGoalState(state)):
+            return actions
+
+        if state not in Expanded:
+            #expand node and generate children
+            Expanded.append(state)
+            for next in problem.getSuccessors(state):
+                new_state = next[0]
+                new_direction = next[1]
+                #check frontier to have reapeated nodes - nodes in priority queue also exist in frontier
+                if next not in Frontier:
+                    Queue.push((new_state, actions + [new_direction]), problem.getCostOfActions(actions + [new_direction]))
+                    Frontier.append(new_state)
+                else:
+                    Queue.update((new_state, actions + [new_direction]), problem.getCostOfActions(actions + [new_direction]))
+        #end of nodes in graph
+        if Queue.isEmpty()==1:
+            break
+
     "*** YOUR CODE HERE ***"
     util.raiseNotDefined()
 
