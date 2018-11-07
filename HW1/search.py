@@ -128,26 +128,26 @@ def breadthFirstSearch(problem):
 
     #make a list for explored nodes
     Explored = []
-    Explored.append( problem.getStartState() )
 
     while True:
 
         tempState = Frontier.pop()
         state = tempState[0]
         actions = tempState[1]
+        # add to explored so it can not be added to frontier again
 
-        # generate succesors and add them
-        for next in problem.getSuccessors(state):
-            new_state = next[0]
-            new_direction = next[1]
-            #check to prevent repeating nodes
-            if new_state not in Explored:
-                if problem.isGoalState(new_state):
-                    # found goal
-                    return actions + [new_direction]
-                # do this to generate its children in the next loop
+
+        if problem.isGoalState(state):
+            # found goal
+            return actions
+        if state not in Explored:
+            Explored.append(state)
+            # generate succesors and add them
+            for next in problem.getSuccessors(state):
+                new_state = next[0]
+                new_direction = next[1]
+                #add to frontier to generate its children in the next loop
                 Frontier.push((new_state, actions + [new_direction]))
-                Explored.append(new_state)
         # end of nodes in graph
         if Frontier.isEmpty() == 1:
             break
