@@ -94,32 +94,29 @@ def depthFirstSearch(problem):
 
     # list of  explored nodes for checking
     Explored = []
-    Explored.append(problem.getStartState())
+    #Explored.append(problem.getStartState())
 
     while True:
         # next node in frontier
         tempState = Frontier.pop()
         state = tempState[0]
         actions = tempState[1]
+        # add to explored so it can not be added to frontier again
+        Explored.append(state)
+
+        if (problem.isGoalState(state)):
+            return actions
 
         # generate succesors and add them
         for next in problem.getSuccessors(state):
             new_state = next[0]
             new_direction = next[1]
+            # add to frontier to generate its children in the next loop
             if new_state not in Explored:
-                if problem.isGoalState(new_state):
-                    # found goal
-                    return actions + [new_direction]
-                else:
-                    # add to frontier to generate its children in the next loop
-                    Frontier.push((new_state, actions + [new_direction]))
-                    # add to explored so it can not be added to frontier again
-                    Explored.append(new_state)
-
+                Frontier.push((new_state, actions + [new_direction]))
         # end of nodes in graph
         if Frontier.isEmpty() == 1:
             break
-
     "*** YOUR CODE HERE ***"
     util.raiseNotDefined()
 
